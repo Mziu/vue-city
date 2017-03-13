@@ -1,16 +1,18 @@
 <template>
   <div>
-    <div>{{ data.country + data.city + data.area}}</div>
-    <select ref="sel1" @change="demo">
+    <div ref="address">{{ data.country + data.city + data.area}}</div>
+    <select ref="sel1" @change="demo" v-model="country">
       <option :value="cty.name" v-for="cty in city">{{cty.name}}</option>
     </select>
-    <select ref="sel2" @change="demo2">
+    <select ref="sel2" @change="demo2" v-model="citys">
       <option  :value="cty.name" v-for="cty in selection" >{{cty.name}}</option>
     </select>
-    <select>
-      <option :value="cty.name" v-for="cty in selection2">{{cty}}</option>
+    <select v-model="areas" ref="sel3">
+      <option :value="cty" v-for="cty in selection2">{{cty}}</option>
     </select>
-    <div>{{selected}}</div>
+    <button @click="ok">OK</button>
+    <button @click="indexof">OK</button>
+    <!-- <div ref="address">{{country}}{{citys}}{{areas}}</div> -->
   </div>
 </template>
 
@@ -26,10 +28,14 @@ export default {
       city: c,
       selected: 0,
       selected2: 0,
+      country: '',
+      citys: '',
+      areas: '',
+      address: '',
       data: {
-        country: '上海',
-        city: '上海',
-        area: '普陀区',
+        country: '辽宁',
+        city: '辽阳',
+        area: '文圣区',
         street: '丹巴路1238号恩瓦德大厦1700层(吓死你?)'
       }
     }
@@ -43,6 +49,48 @@ export default {
     demo2 () {
       // 获取第二个select 选择的索引 返回给变量selected2
       this.selected2 = this.$refs.sel2.selectedIndex
+    },
+
+    check (d) {
+      return d === ''
+    },
+    ok () {
+      let arr = [this.country, this.citys, this.areas]
+      let a = arr.some(this.check) // 依次检查每个元素是否满足check函数的判断，如果有一个元素满足条件，则表达式返回true , 剩余的元素不会再执行检测
+      if (a === true) {
+        console.log('please input address')
+      } else {
+        this.$refs.address.innerHTML = this.country + this.citys + this.areas // 赋值
+      }
+    },
+    indexof () {
+      let a = []
+      for (let i = 0; i < c.length; i++) {
+        a.push(c[i].name) // 把数组里面的城市拿出来添加到空数组a里面
+      }
+      let b = a.indexOf(this.data.country) // 在数组a中查找拿到的courtry并且返回首次出现的位置
+      console.log(b)
+      this.$refs.sel1.selectedIndex = b // 给country 赋值
+      this.selected = b
+
+      let a2 = []
+      for (let i = 0; i < this.city[b].city.length; i++) {
+        a2.push(this.city[b].city[i].name) // 把数组里面的城市拿出来添加到空数组a里面
+      }
+      console.log(a2)
+      let b2 = a2.indexOf(this.data.city)
+      this.$refs.sel2.selectedIndex = b2 // city 赋值
+      console.log(b2)
+      this.selected2 = b2
+
+      let a3 = []
+      for (let i = 0; i < this.city[b].city[b2].area.length; i++) {
+        a3.push(this.city[b].city[b2].area[i]) // 把数组里面的城市拿出来添加到空数组a里面
+      }
+      console.log(a3)
+      let b3 = a3.indexOf(this.data.area)
+      this.$refs.sel3.selectedIndex = b3 // area 赋值
+      console.log(b3)
     }
   },
   computed: {
@@ -56,12 +104,14 @@ export default {
     }
   },
   mounted () {
+    this.indexof()
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
+
 h1, h2 {
   font-weight: normal;
 }
