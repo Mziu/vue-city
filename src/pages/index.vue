@@ -9,14 +9,13 @@
       <select ref="sel2" @change="demo2" v-model="citys">
         <option  :value="cty.name" v-for="cty in selection" >{{cty.name}}</option>
       </select>
-      <select v-model="areas" ref="sel3" @change="demo3">
+      <select ref="sel3" @change="demo3" v-model="areas">
         <option :value="cty" v-for="cty in selection2">{{cty}}</option>
       </select>
     </div>
     
     <button @click="ok" v-if="actived == true">OK</button>
     <button @click="indexof" v-if="actived == false">edit</button>
-    <!-- <div ref="address">{{country}}{{citys}}{{areas}}</div> -->
   </div>
 </template>
 
@@ -52,20 +51,26 @@ export default {
       this.selected = this.$refs.sel1.selectedIndex
       this.selected2 = 0 // 防止选择第一类,第二类下标不存在报错
       this.data.country = this.city[this.selected].name
+      this.citys = ''
+      this.areas = ''
     },
     demo2 () {
-      // 获取第二个select 选择的索引 返回给变量selected2
-      this.selected2 = this.$refs.sel2.selectedIndex
-      this.data.city = this.city[this.selected].city[this.selected2].name
+      if (this.citys !== '' && this.citys !== undefined) {
+        // 获取第二个select 选择的索引 返回给变量selected2
+        this.selected2 = this.$refs.sel2.selectedIndex
+        this.data.city = this.city[this.selected].city[this.selected2].name
+        this.areas = ''
+      }
     },
     demo3 () {
       // 获取第三个select 选择的索引 返回给变量selected3
-      this.selected3 = this.$refs.sel3.selectedIndex
-      console.log(this.selected3)
-      this.data.area = this.city[this.selected].city[this.selected2].area[this.selected3]
+      if (this.areas !== '' && this.areas !== undefined) {
+        this.selected3 = this.$refs.sel3.selectedIndex
+        this.data.area = this.city[this.selected].city[this.selected2].area[this.selected3]
+      }
     },
     check (d) {
-      return d === ''
+      return d === '' || d === undefined
     },
     ok () {
       let arr = [this.country, this.citys, this.areas]
@@ -86,7 +91,6 @@ export default {
       for (let i = 0; i < c.length; i++) {
         a.push(c[i].name) // 把数组里面的城市拿出来添加到空数组a里面
       }
-      console.log(a)
       this.selected = a.indexOf(this.data.country) // 在数组a中查找拿到的courtry并且返回首次出现的位置
       this.country = this.data.country
 
@@ -94,17 +98,15 @@ export default {
       for (let i = 0; i < this.city[this.selected].city.length; i++) {
         a2.push(this.city[this.selected].city[i].name) // 把数组里面的城市拿出来添加到空数组a里面
       }
-      console.log(a2)
       this.selected2 = a2.indexOf(this.data.city)
-      this.citys = this.data.city
+      this.citys = this.data.city ? this.data.city : ''
 
       let a3 = []
-      console.log(a3)
       for (let i = 0; i < this.city[this.selected].city[this.selected2].area.length; i++) {
         a3.push(this.city[this.selected].city[this.selected2].area[i]) // 把数组里面的城市拿出来添加到空数组a里面
       }
       this.selected3 = a3.indexOf(this.data.area)
-      this.areas = this.data.area
+      this.areas = this.data.area ? this.data.area : ''
     }
   },
   computed: {
