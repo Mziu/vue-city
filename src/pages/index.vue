@@ -52,11 +52,15 @@ export default {
       this.selected = this.$refs.sel1.selectedIndex
       this.selected2 = 0 // 防止选择第一类,第二类下标不存在报错
       this.data.country = this.city[this.selected].name
+      this.data.city = ''
+      this.data.area = ''
+      this.$refs.sel2.selectedIndex = 0
     },
     demo2 () {
       // 获取第二个select 选择的索引 返回给变量selected2
       this.selected2 = this.$refs.sel2.selectedIndex
       this.data.city = this.city[this.selected].city[this.selected2].name
+      this.data.area = ''
     },
     demo3 () {
       // 获取第三个select 选择的索引 返回给变量selected3
