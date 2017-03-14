@@ -11,7 +11,7 @@
       <option :value="cty" v-for="cty in selection2">{{cty}}</option>
     </select>
     <button @click="ok">OK</button>
-    <button @click="indexof">OK</button>
+    <button @click="indexof">edit</button>
     <!-- <div ref="address">{{country}}{{citys}}{{areas}}</div> -->
   </div>
 </template>
@@ -28,6 +28,7 @@ export default {
       city: c,
       selected: 0,
       selected2: 0,
+      selected3: 0,
       country: '',
       citys: '',
       areas: '',
@@ -44,7 +45,7 @@ export default {
     demo () {
       // 获取第一个select 选择的索引 返回给变量selected
       this.selected = this.$refs.sel1.selectedIndex
-      this.selected2 = 0 // 防止选择第一类没有第二类下标报错
+      this.selected2 = 0 // 防止选择第一类,第二类下标不存在报错
     },
     demo2 () {
       // 获取第二个select 选择的索引 返回给变量selected2
@@ -63,34 +64,30 @@ export default {
         this.$refs.address.innerHTML = this.country + this.citys + this.areas // 赋值
       }
     },
+    matchcity () {
+
+    },
     indexof () {
       let a = []
       for (let i = 0; i < c.length; i++) {
         a.push(c[i].name) // 把数组里面的城市拿出来添加到空数组a里面
       }
-      let b = a.indexOf(this.data.country) // 在数组a中查找拿到的courtry并且返回首次出现的位置
-      console.log(b)
-      this.$refs.sel1.selectedIndex = b // 给country 赋值
-      this.selected = b
+      this.selected = a.indexOf(this.data.country) // 在数组a中查找拿到的courtry并且返回首次出现的位置
+      this.$refs.sel1.selectedIndex = this.selected // 给country 赋值
 
       let a2 = []
-      for (let i = 0; i < this.city[b].city.length; i++) {
-        a2.push(this.city[b].city[i].name) // 把数组里面的城市拿出来添加到空数组a里面
+      for (let i = 0; i < this.city[this.selected].city.length; i++) {
+        a2.push(this.city[this.selected].city[i].name) // 把数组里面的城市拿出来添加到空数组a里面
       }
-      console.log(a2)
-      let b2 = a2.indexOf(this.data.city)
-      this.$refs.sel2.selectedIndex = b2 // city 赋值
-      console.log(b2)
-      this.selected2 = b2
+      this.selected2 = a2.indexOf(this.data.city)
+      this.$refs.sel2.selectedIndex = this.selected2 // city 赋值
 
       let a3 = []
-      for (let i = 0; i < this.city[b].city[b2].area.length; i++) {
-        a3.push(this.city[b].city[b2].area[i]) // 把数组里面的城市拿出来添加到空数组a里面
+      for (let i = 0; i < this.city[this.selected].city[this.selected2].area.length; i++) {
+        a3.push(this.city[this.selected].city[this.selected2].area[i]) // 把数组里面的城市拿出来添加到空数组a里面
       }
-      console.log(a3)
-      let b3 = a3.indexOf(this.data.area)
-      this.$refs.sel3.selectedIndex = b3 // area 赋值
-      console.log(b3)
+      this.selected3 = a3.indexOf(this.data.area)
+      this.$refs.sel3.selectedIndex = this.selected3 // area 赋值
     }
   },
   computed: {
